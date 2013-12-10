@@ -1,0 +1,39 @@
+{
+  "name": "PhuneGamingSDK",
+  "description": "Phune Gaming SDK for JavaScript",
+  "version": "0.0.1",
+  "homepage": "https://github.com/phune-gaming/pg-sdk-js",
+  "author": {
+    "name": "Present Technologies",
+    "email": "phunegaming@present-technologies.com",
+    "url": "http://www.present-technologies.com"
+  },
+  "contributors": [{
+    "name": "Aurelio Santos",
+    "email": "aurelio.santos@present-technologies.com",
+    "url": "https://github.com/aurhe"
+  }],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phune-gaming/pg-sdk-js"
+  },
+  "bugs": {
+    "url": "https://github.com/phune-gaming/pg-sdk-js/issues"
+  },
+  "keywords": [
+    "phune",
+    "phunegaming",
+    "sdk"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-jshint": "~0.4.0",
+    "grunt-contrib-uglify": "~0.2.0",
+    "matchdep": "~0.1.2"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}
