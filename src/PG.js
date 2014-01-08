@@ -9,6 +9,11 @@
     var PG = function() {
 
         var origin = (window.location.origin) ? window.location.origin : document.location.protocol + '//' + document.location.host,
+            result = {
+                WON: 'won',
+                LOST: 'lost',
+                DRAW: 'draw'
+            },
             message, lastMessage = null,
             player, opponent;
 
@@ -19,20 +24,18 @@
          * @param {number} winnerPlayerId The id of the player that won the match.
          * @returns {string} A game result valid value.
          */
-        var getGameResults = function(winnerPlayerId) {
-            var gameResults;
-
-            if (typeof winnerPlayerId !== 'undefined') {
-                if (winnerPlayerId === 0) {
-                    gameResults = 'draw';
-                } else if (winnerPlayerId === player.id) {
-                    gameResults = 'won';
-                } else {
-                    gameResults = 'lost';
-                }
+        var getGameResult = function(winnerPlayerId) {
+            if (typeof winnerPlayerId === 'undefined') {
+                throw new Error('The "winnerPlayerId" parameter is missing or is empty');
             }
 
-            return gameResults;
+            if (winnerPlayerId === player.id) {
+                return result.WON;
+            } else if (winnerPlayerId === opponent.id) {
+                return result.LOST;
+            }
+
+            return result.DRAW;
         };
 
         /**
@@ -65,9 +68,9 @@
          * @param {boolean} playerToPlayNext The identifier of the player to whom the next move belongs.
          * @param {Object} moveDetails The move details.
          * @param {Object} moveResults The results of the move validation.
-         * @param {string} [gameResults] If the move ended the game, this indicates its results. Possible values are 'won', 'lost', and 'draw'.
+         * @param {string} [gameResult] If the move ended the game, this indicates its results. Possible values are 'won', 'lost', and 'draw'.
          */
-        var onMoveValid = function(playerIdWhoSentTheMove, playerToPlayNext, moveDetails, moveResults, gameResults) {
+        var onMoveValid = function(playerIdWhoSentTheMove, playerToPlayNext, moveDetails, moveResults, gameResult) {
             throw new Error('onMoveValid is not implemented.');
         };
 
@@ -86,9 +89,9 @@
          * Called by the platform when a match end event is received.
          *
          * @abstract
-         * @param {string} gameResults The game results. Possible values are 'won', 'lost', and 'draw'.
+         * @param {string} gameResult The game results. Possible values are 'won', 'lost', and 'draw'.
          */
-        var onMatchEnd = function(gameResults) {
+        var onMatchEnd = function(gameResult) {
             throw new Error('onMatchEnd is not implemented.');
         };
 
@@ -155,13 +158,13 @@
                         onMatchStart(msg.data.nextPlayerId);
                         break;
                     case 'matchMoveValid':
-                        onMoveValid(msg.data.playerId, msg.data.nextPlayerId, msg.data.content, msg.data.evaluationContent, getGameResults(msg.data.winnerPlayerId));
+                        onMoveValid(msg.data.playerId, msg.data.nextPlayerId, msg.data.content, msg.data.evaluationContent, getGameResult(msg.data.winnerPlayerId));
                         break;
                     case 'matchMoveInvalid':
                         onMoveInvalid(msg.data.playerId, msg.data.nextPlayerId);
                         break;
                     case 'matchEnd':
-                        onMatchEnd(getGameResults(msg.data.winnerPlayerId));
+                        onMatchEnd(getGameResult(msg.data.winnerPlayerId));
                         break;
                     case 'serverMessage':
                         onServerMessage(msg.data.playerId, msg.data.content, msg.data.result);
