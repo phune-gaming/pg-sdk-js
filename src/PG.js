@@ -45,8 +45,9 @@
          * @param {Object} player Current player details.
          * @param {Object} opponent Opponent details.
          * @param {number} timeToPlay Time allowed for the player to make a move.
+         * @param {string} deviceType Indicates the type of the device where the game is running. Possible values are 'MOBILE' and 'TV'.
          */
-        var onMatchPrepare = function(player, opponent, timeToPlay) {
+        var onMatchPrepare = function(player, opponent, timeToPlay, deviceType) {
             throw new Error('onMatchPrepare is not implemented.');
         };
 
@@ -152,7 +153,7 @@
                     case 'matchPrepare':
                         player = msg.data.player;
                         opponent = msg.data.opponent;
-                        onMatchPrepare(player, opponent, msg.data.moveTimeout);
+                        onMatchPrepare(player, opponent, msg.data.moveTimeout, msg.data.deviceType);
                         break;
                     case 'matchStart':
                         onMatchStart(msg.data.nextPlayerId);
