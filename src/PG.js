@@ -26,7 +26,7 @@
          */
         var getGameResult = function(winnerPlayerId) {
             if (typeof winnerPlayerId === 'undefined') {
-                throw new Error('The "winnerPlayerId" parameter is missing or is empty');
+                return;
             }
 
             if (winnerPlayerId === player.id) {
