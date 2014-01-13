@@ -1,4 +1,4 @@
-(function(window) {
+(function(window, document) {
     'use strict';
 
     /**
@@ -8,7 +8,7 @@
      */
     var PG = function() {
 
-        var origin = (window.location.origin) ? window.location.origin : document.location.protocol + '//' + document.location.host,
+        var origin = (document.location.origin) ? document.location.origin : document.location.protocol + '//' + document.location.host,
             result = {
                 WON: 'won',
                 LOST: 'lost',
@@ -284,4 +284,4 @@
     };
     window.PG = new PG();
 
-}(window));
+}(window, document));
