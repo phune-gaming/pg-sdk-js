@@ -66,12 +66,12 @@
          *
          * @abstract
          * @param {boolean} playerIdWhoSentTheMove The identifier of the player that sent the move.
-         * @param {boolean} playerToPlayNext The identifier of the player to whom the next move belongs.
+         * @param {boolean} playerIdToPlayNext The identifier of the player to whom the next move belongs.
          * @param {Object} moveDetails The move details.
          * @param {Object} moveResults The results of the move validation.
          * @param {string} [gameResult] If the move ended the game, this indicates its results. Possible values are 'won', 'lost', and 'draw'.
          */
-        var onMoveValid = function(playerIdWhoSentTheMove, playerToPlayNext, moveDetails, moveResults, gameResult) {
+        var onMoveValid = function(playerIdWhoSentTheMove, playerIdToPlayNext, moveDetails, moveResults, gameResult) {
             throw new Error('onMoveValid is not implemented.');
         };
 
@@ -80,9 +80,9 @@
          *
          * @abstract
          * @param {boolean} playerIdWhoSentTheMove The identifier of the player that sent the move.
-         * @param {boolean} playerToPlayNext The identifier of the player to whom the next move belongs.
+         * @param {boolean} playerIdToPlayNext The identifier of the player to whom the next move belongs.
          */
-        var onMoveInvalid = function(playerIdWhoSentTheMove, playerToPlayNext) {
+        var onMoveInvalid = function(playerIdWhoSentTheMove, playerIdToPlayNext) {
             throw new Error('onMoveInvalid is not implemented.');
         };
 
