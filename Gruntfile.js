@@ -5,7 +5,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     clean: {
-      dist: ['dist', 'doc']
+      dist: ['dist', 'docs']
     },
     jshint: {
       options: {
@@ -57,12 +57,14 @@ module.exports = function(grunt) {
       basic: {
         src: ['src/{,*/}*.js'],
         options: {
-          destination: 'doc/basic'
+          destination: 'docs/basic',
+          private: false
         }
       }
     }
   });
 
+  grunt.registerTask('default', ['clean', 'jshint', 'uglify']);
   grunt.registerTask('build', ['uglify']);
-  grunt.registerTask('default', ['clean', 'jshint', 'uglify', 'jsdoc']);
+  grunt.registerTask('docs', ['jsdoc']);
 };
