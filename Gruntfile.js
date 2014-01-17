@@ -1,62 +1,68 @@
 'use strict';
+
 module.exports = function(grunt) {
-    // load all grunt tasks
-    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  require('load-grunt-tasks')(grunt);
 
-    grunt.initConfig({
-        // Metadata.
-        pkg: grunt.file.readJSON('package.json'),
-        // Task configuration.
-        clean: {
-            all: ['dist']
-        },
-        jshint: {
-            options: {
-                browser: true,
-                es5: true,
-                esnext: true,
-                bitwise: true,
-                camelcase: true,
-                curly: true,
-                eqeqeq: true,
-                immed: true,
-                indent: 4,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                quotmark: 'single',
-                regexp: true,
-                undef: true,
-                unused: true,
-                strict: true,
-                trailing: true,
-                devel: true,
-                '-W098': true, // ignore defined variables that are never used in methods that should be overridden
-                globals: {
-                    PG: true,
-                }
-            },
-            all: [
-                'src/*.js',
-            ]
-        },
-        uglify: {
-            dist: {
-                files: {
-                    'dist/PG.min.js': [
-                        'src/PG.js'
-                    ]
-                }
-            }
+  grunt.initConfig({
+    clean: {
+      dist: ['dist', 'doc']
+    },
+    jshint: {
+      options: {
+        node: true,
+        browser: true,
+        bitwise: true,
+        camelcase: true,
+        curly: true,
+        eqeqeq: true,
+        immed: true,
+        indent: 4,
+        latedef: true,
+        newcap: true,
+        noarg: true,
+        quotmark: 'single',
+        undef: true,
+        unused: true,
+        strict: true,
+        trailing: true,
+        '-W098': true, // ignore defined parameters that are never used in methods
+        globals: {
         }
-    });
+      },
+      src: ['src/{,*/}*.js'],
+      grunt: {
+        options: {
+          indent: 2
+        },
+        src: ['Gruntfile.js']
+      },
+      package: {
+        options: {
+          indent: 2,
+          quotmark: 'double'
+        },
+        src: ['package.json']
+      }
+    },
+    uglify: {
+      dist: {
+        files: {
+          'dist/PG.min.js': [
+            'src/PG.js'
+          ]
+        }
+      }
+    },
+    jsdoc: {
+      basic: {
+        src: ['src/{,*/}*.js'],
+        options: {
+          destination: 'doc/basic'
+        }
+      }
+    }
+  });
 
-    grunt.registerTask('build', [
-        'clean',
-        'jshint',
-        'uglify'
-    ]);
-
-    grunt.registerTask('default', ['build']);
-
+  grunt.registerTask('build', ['uglify']);
+  grunt.registerTask('default', ['clean', 'jshint', 'uglify', 'jsdoc']);
 };

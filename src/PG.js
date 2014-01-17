@@ -1,10 +1,16 @@
+/**
+ * @file Phune Gaming SDK providing all platform related functionality.
+ * @license MIT License <http://opensource.org/licenses/MIT>
+ * @copyright Copyright (c) 2014 Present Technologies
+ */
 (function(window, document) {
     'use strict';
 
     /**
-     * Phune Gaming SDK providing all platform related functionality.
+     * Constructs a new instance of the Phune Gaming SDK.
      *
-     * @constructor
+     * @constructor PG
+     * @classdesc Phune Gaming SDK
      */
     var PG = function() {
 
@@ -21,6 +27,8 @@
          * Get the game results with the correct value based on the winnerPlayerId param.
          *
          * @private
+         * @abstract
+         * @memberof PG
          * @param {number} winnerPlayerId The id of the player that won the match.
          * @returns {string} A game result valid value.
          */
@@ -41,7 +49,9 @@
         /**
          * The game should build the user interface and get ready to start playing.
          *
+         * @private
          * @abstract
+         * @memberof PG
          * @param {Object} player Current player details.
          * @param {Object} opponent Opponent details.
          * @param {number} timeToPlay Time allowed for the player to make a move.
@@ -54,7 +64,9 @@
         /**
          * The match start confirmation. Only now is the player allowed to play the game.
          *
+         * @private
          * @abstract
+         * @memberof PG
          * @param {boolean} playerIdToPlayNext The identifier of the player to whom the next move belongs.
          */
         var onMatchStart = function(playerIdToPlayNext) {
@@ -64,7 +76,9 @@
         /**
          * Acknowledgment to a valid move.
          *
+         * @private
          * @abstract
+         * @memberof PG
          * @param {boolean} playerIdWhoSentTheMove The identifier of the player that sent the move.
          * @param {boolean} playerIdToPlayNext The identifier of the player to whom the next move belongs.
          * @param {Object} moveDetails The move details.
@@ -78,7 +92,9 @@
         /**
          * Acknowledgment to an invalid move.
          *
+         * @private
          * @abstract
+         * @memberof PG
          * @param {boolean} playerIdWhoSentTheMove The identifier of the player that sent the move.
          * @param {boolean} playerIdToPlayNext The identifier of the player to whom the next move belongs.
          */
@@ -89,7 +105,9 @@
         /**
          * Called by the platform when a match end event is received.
          *
+         * @private
          * @abstract
+         * @memberof PG
          * @param {string} gameResult The game results. Possible values are 'won', 'lost', and 'draw'.
          */
         var onMatchEnd = function(gameResult) {
@@ -99,7 +117,9 @@
         /**
          * A message from the server-side rules was received.
          *
+         * @private
          * @abstract
+         * @memberof PG
          * @param {boolean} playerWhoSentTheMessage The identifier of the player that sent the message.
          * @param {Object} messageDetails Message specific to a game and unknown to the platform. The developer is advised to have multiple message types with different bodies in order to achieve different goals.
          * @param {Object} messageResults The result returned by the server-side rules.
@@ -111,7 +131,9 @@
         /**
          * A message sent directly from another player was received.
          *
+         * @private
          * @abstract
+         * @memberof PG
          * @param {Object} messageDetails Message specific to a game and unknown to the platform. The developer is advised to have multiple message types with different bodies in order to achieve different goals.
          */
         var onPlayerMessage = function(messageDetails) {
@@ -121,7 +143,9 @@
         /**
          * A keyboard or TV remote control key was pressed.
          *
+         * @private
          * @abstract
+         * @memberof PG
          * @param {string} key The key that was pressed. Possible values are 'left', 'right', 'up', 'down', and 'enter'.
          */
         var onKeyPress = function(key) {
@@ -132,6 +156,8 @@
             /**
              * Initialize the Phune Gaming SDK.
              *
+             * @public
+             * @memberof PG
              * @param {Object} params Object containing all the options to configure the SDK. This includes the mandatory callback functions: onMatchPrepare, onMatchStart, onMoveValid, onMoveInvalid, onMatchEnd, and the optional callback functions: onServerMessage, onPlayerMessage, and onKeyPress.
              */
             init: function(params) {
@@ -188,6 +214,9 @@
             /**
              * This function can be used optionally before calling PG.ready() which initiates the match.
              * It can be used to show the game screen to the user before the match starts. Allowing the player to configure the game on the server which will broadcast those configurations to the other players.
+             *
+             * @public
+             * @memberof PG
              */
             prepared: function() {
                 window.parent.postMessage({
@@ -197,6 +226,9 @@
 
             /**
              * Informs the server that the client is ready to start the match.
+             * 
+             * @public
+             * @memberof PG
              */
             ready: function() {
                 window.parent.postMessage({
@@ -207,6 +239,8 @@
             /**
              * Send a move to the platform server.
              *
+             * @public
+             * @memberof PG
              * @param {Object} moveDetails The move details.
              * @param {function(Object): boolean} [validate] Optional function to validate the move before sending it to server.
              * @returns {boolean} True when the move is valid or when no validation function was provided.
@@ -226,6 +260,9 @@
 
             /**
              * Asks the platform to show the game menu.
+             *
+             * @public
+             * @memberof PG
              */
             showMenu: function() {
                 window.parent.postMessage({
@@ -237,6 +274,8 @@
              * Send a message to the server-side rules. This message is specific to a game and will not be processed by the platform itself.
              * The response from the server could either be sent to you only or to all players.
              *
+             * @public
+             * @memberof PG
              * @param {Object} messageDetails The content of the message to be sent.
              * @param {boolean} isAnswerPublic Whether the reply from the server's rules should be sent to all players or not.
              * @param {boolean} [serializeRequest] Whether the messages should be processed in order of arrival or can be executed in parallel.
@@ -253,6 +292,8 @@
             /**
              * Peer-to-peer message sent directly to another player.
              *
+             * @public
+             * @memberof PG
              * @param {Object} messageDetails The content of the message to be sent.
              * @param {number} [sendTimeIntervalLimit] Do not allow sending more than one message within the specified time in milliseconds.
              *                 If this is called more than once during this interval only the last message will be sent.
