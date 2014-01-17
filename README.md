@@ -210,4 +210,6 @@ onKeyPress: function(key) {
 ```
 
 ## License
-Copyright (c) 2013 Present Technologies  
+
+Copyright (c) 2014 Present Technologies
+Licensed under the MIT license.
