@@ -8,6 +8,12 @@ Building Phune Gaming SDK requires you to have previously installed [Node.js](ht
 
 ## Build
 
+Install Grunt's command line interface globally:
+
+```
+npm install -g grunt-cli
+```
+
 Install Node.js dependencies:
 
 ```
