@@ -1,6 +1,6 @@
 # Phune Gaming SDK for JavaScript
 
-Build HTML5 games for Phune Gaming platform.
+Build HTML5 games for the Phune Gaming platform.
 
 ## Requirements
 
@@ -62,16 +62,16 @@ PG.init({
     onMatchStart: function(playerIdToPlayNext) {
         // ...
     },
-    onServerMessage: function(playerIdWhoSentTheMessage, messageDetails, messageResults) {
-        // ...
-    },
-    onPlayerMessage: function(messageDetails) {
-        // ...
-    },
     onMoveValid: function(playerIdWhoSentTheMove, playerIdToPlayNext, moveDetails, moveResults, gameResults) {
         // ...
     },
     onMoveInvalid: function(playerIdWhoSentTheMove, playerIdToPlayNext) {
+        // ...
+    },
+    onServerMessage: function(playerIdWhoSentTheMessage, messageDetails, messageResults) {
+        // ...
+    },
+    onPlayerMessage: function(messageDetails) {
         // ...
     },
     onMatchEnd: function(gameResults) {
@@ -85,9 +85,9 @@ PG.init({
 
 Please find below a detailed description for each callback.
 
-### Prepare the match
+### Match prepare
 
-During the match preparation phase, the game should build the user interface and get ready to start playing. It is provided with the details of the player and opponent, the time allowed for each player to make a move and in which device type the game is running (mobile or tv).
+During the match preparation phase, the game should build the user interface and get ready to start playing. It is provided with the details of the player and opponent, the time allowed for each player to make a move and in which device type the game is running ('mobile' or 'tv').
 
 ```js
 onMatchPrepare: function(player, opponent, timeToPlay, deviceType) {
@@ -95,21 +95,21 @@ onMatchPrepare: function(player, opponent, timeToPlay, deviceType) {
 },
 ```
 
-### Match starts
+### Match start
 
 When the match starts the game will be informed of which player should start playing. 
 
 ```js
-onMatchStart: function(playerIdToPlayNext){
+onMatchStart: function(playerIdToPlayNext) {
     // ...
 },
 ```
 
-### Receive move confirmations and opponent moves
+### Moves handling and validation
 
-If the move passed the server-side rules validation, the server will respond with a confirmation message that will be handled by the onMoveValid callback function. Moves performed by the opponent will also be handled by this callback function.
+If a move is considered valid from the server-side rules, the server will respond with a confirmation message that will be handled by the `onMoveValid` callback function. Moves performed by the opponent will also be handled by this callback function.
 
-If a move ends the game, the gameResults parameter will indicate how the game ended. Possible values are 'won', 'lost', and 'draw'.
+If a move ends the game, the `gameResults` parameter will indicate how the game ended. Possible values are 'won', 'lost', and 'draw'.
 
 ```js
 onMoveValid: function(playerIdWhoSentTheMove, playerIdToPlayNext, moveDetails, moveResults, gameResults) {
@@ -117,7 +117,7 @@ onMoveValid: function(playerIdWhoSentTheMove, playerIdToPlayNext, moveDetails, m
 },
 ```
 
-If the move does not pass the server-side rules validation, the game will be notified in the onMoveInvalid callback function.
+If a move does not pass the server-side rules validation, the game will be notified by the `onMoveInvalid` callback function.
 
 ```js
 onMoveInvalid: function(playerIdWhoSentTheMove, playerIdToPlayNext) {
@@ -127,7 +127,7 @@ onMoveInvalid: function(playerIdWhoSentTheMove, playerIdToPlayNext) {
 
 ### Handle messages from the server
 
-Responses to messages sent to the server will be processed in the onServerMatch callback function.
+Responses to messages sent to the server will be processed by the `onServerMatch` callback function.
 
 ```js
 onServerMessage: function(playerIdWhoSentTheMessage, messageDetails, messageResults) {
@@ -135,9 +135,9 @@ onServerMessage: function(playerIdWhoSentTheMessage, messageDetails, messageResu
 },
 ```
 
-### Handle message from the opponent
+### Handle messages from an opponent
 
-Messages sent by the opponent will be processed by the onPlayerMessage callback function.
+Messages sent by the opponent will be processed by the `onPlayerMessage` callback function.
 
 ```js
 onPlayerMessage: function(messageDetails) {
@@ -145,67 +145,69 @@ onPlayerMessage: function(messageDetails) {
 },
 ```
 
-### Match ended
+### Match end
 
-When the game ends, the onMatchEnd callback function is called with the end condition. Possible values are 'won', 'lost', and 'draw'.
+When the game ends, the `onMatchEnd` callback function is called with the end condition. Possible values are 'won', 'lost', and 'draw'.
 
 ```js
 onMatchEnd: function(gameResults) {
     switch (gameResults) {
-        case 'won':
-            // ...
+    case 'won':
+        // ...
         break;
-        case 'lost':
-            // ...
+    case 'lost':
+        // ...
         break;
-        case 'draw':
-            // ...
+    default:
+        // draw...
         break;
     }
 },
 ```
 
-### Handle TV remote control input
+### TV remote control input handling
 
-In the TV environment, the information of remote control buttons that were pressed, are sent to the game to be handled in the onKeyPress callback function. Possible values are: 'left', 'right', 'up', 'down' and 'enter'.
+On TV environment, the information of remote control buttons that were pressed, are sent to the game to be handled by the `onKeyPress` callback function. Possible values are: 'left', 'right', 'up', 'down' and 'enter'.
 
 ```js
 onKeyPress: function(key) {
     switch(key) {
-        case 'left':
-            // ...
-            break;
-        case 'right':
-            // ...
-            break;
-        case 'up':
-            // ...
-            break;
-        case 'down':
-            // ...
-            break;
-        case 'enter':
-            // ...
-            break;
+    case 'left':
+        // ...
+        break;
+    case 'right':
+        // ...
+        break;
+    case 'up':
+        // ...
+        break;
+    case 'down':
+        // ...
+        break;
+    case 'enter':
+        // ...
+        break;
     }
 }
 ```
 
 ## Public API
 
-The Phune Gaming SDK provides an [API](http://phune-gaming.github.io/pg-sdk-js/) with the public methods detailed bellow.
+The Phune Gaming SDK provides an [API](http://phune-gaming.github.io/pg-sdk-js/) with the public methods as detailed below.
 
-### Start the match
+### Match start
 
-During the match preparation phase the game should inform the platform when it should be shown to the player and when it is ready to start the match. 
+During the match preparation phase (`onMatchPrepare` callback) the game must inform the platform when it is ready to be shown to the user and when it is ready to start the match. For starting a match both functions `PG.prepared` and `PG.ready` below must be called.
 
-If the game requires user interaction to configure the match details, it should request the game to be shown to the user calling PG.prepared. Then it can send messages to be evaluated by the server-side rules.
+The game interface can be shown to the user by calling the function `PG.prepared`.
 
 ```js
 PG.prepared();
 ```
 
-When it is ready to start the match, it should call PG.ready. If PG.prepared has not been called, the game will now be shown to the user.
+If the game requires some sort of configuration, additional messages need to be sent to the server by calling `PG.serverMessage` after calling `PG.prepared` but before `PG.ready`.
+
+When the game is finally ready to start the match, it should call `PG.ready`. If `PG.prepared` was not called previously, the game will not be shown to the user.
 
 ```js
 PG.ready();
@@ -213,40 +215,41 @@ PG.ready();
 
 ### Send messages to the server
 
-It is possible to send messages to be evaluated by the server side-rules. You can specify if you want the response to be sent to both player or only to you. Additionally you can also indicate if you want the messages to be processed by the server-side rules in order of arrival or can be executed in parallel.
+It is possible to send messages to be evaluated by the server-side rules. You can specify if you want the response to be sent to both players or only to yourself. Additionally you can also indicate if you want the messages to be processed by the server-side rules in order of arrival or in parallel.
 
 ```js
 PG.serverMessage(
-    { message: 'message' },    // any message content can be passed here
-    false,                     // should the response be sent to both players
-    true                       // should the message be processed by the order of arrival
+    messageObject,    // any message content can be passed here
+    false,            // should the response be sent to both players?
+    true              // should the message be processed by the order of arrival?
 );
 ```
 
 ### Send messages to the opponent
 
-If the game requires to send messages to the opponent that should not be evaluated by the server-side rules, it can use the PG.playerMessage. Optionally, you can specify if you do not want to allow to send more than one message within the specified time in milliseconds. If this is called more than once during this interval only the last message will be sent.
+If the game requires to send messages to the opponent that should not be evaluated by the server-side rules, it can use this function. Optionally, you can specify if you do not want to allow more than one message to be sent within the specified time in milliseconds. If this is called more than once during this interval only the last message will be sent.
 
 ```js
 PG.playerMessage(
-    { message: 'message' },    // any message content can be passed here
-    150                        // do not send more than one message during this interval
+    messageObject,    // any message content can be passed here
+    150               // do not send more than one message during this interval
 );
 ```
 
-### Perform moves
+### Perform a move
 
-If it is the current player turn, the game should allow the player to make a move and then send it to the platform.
+If it is the current player turn, the game should allow the player to make a move and then send it to the platform. Optionally, you can specify a validate function that accepts the move object as a parameter and validates it before sending it to the server. This prevents additional round-trips to the server for invalid moves, thus making the game a lot more responsive.
 
 ```js
-PG.move({
-    pos: 0 // any move details can be passed here
-});
+PG.move(
+    moveObject,         // any move details can be passed here
+    validateFunction    // function to validate the move
+);
 ```
 
 ### Show the platform menu
 
-The game must implement a way to allow the player to see the platform menu. When the user indicates that he wants to see the menu call PG.showMenu.
+The game must include a visual component allowing a user to call for the platform menu. In order to show the menu that component must call the function `PG.showMenu`.
 
 ```js
 PG.showMenu();
