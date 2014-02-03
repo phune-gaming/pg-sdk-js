@@ -56,10 +56,13 @@ Initialize the SDK by calling `PG.init` and define the callback functions that w
 
 ```js
 PG.init({
-    onMatchPrepare: function(player, opponent, timeToPlay, deviceType) {
+    onMatchPrepare: function(player, opponent, deviceType) {
         // ...
     },
-    onMatchStart: function(playerIdToPlayNext) {
+    onGameLobby: function(allowedTime) {
+        // ...
+    },
+    onMatchStart: function(playerIdToPlayNext, timeToPlay) {
         // ...
     },
     onMoveValid: function(playerIdWhoSentTheMove, playerIdToPlayNext, moveDetails, moveResults, gameResults) {
@@ -87,20 +90,30 @@ Please find below a detailed description for each callback.
 
 ### Match prepare
 
-During the match preparation phase, the game should build the user interface and get ready to start playing. It is provided with the details of the player and opponent, the time allowed for each player to make a move and in which device type the game is running ('mobile' or 'tv').
+During the match preparation phase, the game should build the user interface and get ready to start playing. It is provided with the details of the player and opponent, and in which type of device the game is running ('mobile' or 'tv').
 
 ```js
-onMatchPrepare: function(player, opponent, timeToPlay, deviceType) {
+onMatchPrepare: function(player, opponent, deviceType) {
+    // ...
+},
+```
+
+### Game lobby
+
+If the game needs to configure the match details before it is started, the `onGameLobby` callback function will be called to allow it to do so. It is provided with the time allowed for the player to configure the game and start the match.
+
+```js
+onGameLobby: function(allowedTime) {
     // ...
 },
 ```
 
 ### Match start
 
-When the match starts the game will be informed of which player should start playing. 
+When the match starts the game will be informed of which player should start playing and the time allowed for each player to make a move.
 
 ```js
-onMatchStart: function(playerIdToPlayNext) {
+onMatchStart: function(playerIdToPlayNext, timeToPlay) {
     // ...
 },
 ```
@@ -197,20 +210,18 @@ The Phune Gaming SDK provides an [API](http://phune-gaming.github.io/pg-sdk-js/)
 
 ### Match start
 
-During the match preparation phase (`onMatchPrepare` callback) the game must inform the platform when it is ready to be shown to the user and when it is ready to start the match. For starting a match both functions `PG.prepared` and `PG.ready` below must be called.
-
-The game interface can be shown to the user by calling the function `PG.prepared`.
-
-```js
-PG.prepared();
-```
-
-If the game requires some sort of configuration, additional messages need to be sent to the server by calling `PG.serverMessage` after calling `PG.prepared` but before `PG.ready`.
-
-When the game is finally ready to start the match, it should call `PG.ready`. If `PG.prepared` was not called previously, the game will not be shown to the user.
+During the match preparation phase (`onMatchPrepare` callback) the game must inform the platform when it is ready to be shown to the user by calling `PG.ready`.
 
 ```js
 PG.ready();
+```
+
+### Game lobby
+
+If the game is configured on the server to require a configuration phase, the (`onGameLobby` callback) will be called to allow the game to send the required configuration back to the server by calling `PG.serverMessage`. When finished, it must inform the platform that the match is ready to start by calling `PG.exitGameLobby`.
+
+```js
+PG.exitGameLobby();
 ```
 
 ### Send messages to the server
