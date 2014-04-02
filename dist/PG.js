@@ -54,11 +54,22 @@
          * @memberof PG
          * @param {Object} player Current player details.
          * @param {Object} opponent Opponent details.
-         * @param {number} timeToPlay Time allowed for the player to make a move.
          * @param {string} deviceType Indicates the type of the device where the game is running. Possible values are 'MOBILE' and 'TV'.
          */
-        var onMatchPrepare = function(player, opponent, timeToPlay, deviceType) {
+        var onMatchPrepare = function(player, opponent, deviceType) {
             throw new Error('onMatchPrepare is not implemented.');
+        };
+
+        /**
+         * The game can now configure the match details.
+         *
+         * @private
+         * @abstract
+         * @memberof PG
+         * @param {number} allowedTime Time allowed for the player to configure the game and start the match.
+         */
+        var onGameLobby = function(allowedTime) {
+            throw new Error('onGameLobby is not implemented.');
         };
 
         /**
@@ -68,8 +79,9 @@
          * @abstract
          * @memberof PG
          * @param {boolean} playerIdToPlayNext The identifier of the player to whom the next move belongs.
+         * @param {number} timeToPlay Time allowed for the player to make a move.
          */
-        var onMatchStart = function(playerIdToPlayNext) {
+        var onMatchStart = function(playerIdToPlayNext, timeToPlay) {
             throw new Error('onMatchStart is not implemented.');
         };
 
@@ -162,6 +174,7 @@
              */
             init: function(params) {
                 onMatchPrepare = params.onMatchPrepare || onMatchPrepare;
+                onGameLobby = params.onGameLobby || onGameLobby;
                 onMatchStart = params.onMatchStart || onMatchStart;
                 onMoveValid = params.onMoveValid || onMoveValid;
                 onMoveInvalid = params.onMoveInvalid || onMoveInvalid;
@@ -179,10 +192,13 @@
                     case 'matchPrepare':
                         player = msg.data.player;
                         opponent = msg.data.opponent;
-                        onMatchPrepare(player, opponent, msg.data.moveTimeout, msg.data.deviceType);
+                        onMatchPrepare(player, opponent, msg.data.deviceType);
+                        break;
+                    case 'enterGameLobby':
+                        onGameLobby(msg.data.timeout);
                         break;
                     case 'matchStart':
-                        onMatchStart(msg.data.nextPlayerId);
+                        onMatchStart(msg.data.nextPlayerId, msg.data.timeout);
                         break;
                     case 'matchMoveValid':
                         onMoveValid(msg.data.playerId, msg.data.nextPlayerId, msg.data.content, msg.data.evaluationContent, getGameResult(msg.data.winnerPlayerId));
@@ -212,27 +228,26 @@
             },
 
             /**
-             * This function can be used optionally before calling PG.ready() which initiates the match.
-             * It can be used to show the game screen to the user before the match starts. Allowing the player to configure the game on the server which will broadcast those configurations to the other players.
-             *
-             * @public
-             * @memberof PG
-             */
-            prepared: function() {
-                window.parent.postMessage({
-                    type: 'prepared'
-                }, origin);
-            },
-
-            /**
              * Informs the server that the client is ready to start the match.
-             * 
+             *
              * @public
              * @memberof PG
              */
             ready: function() {
                 window.parent.postMessage({
                     type: 'ready'
+                }, origin);
+            },
+
+            /**
+             * Informs the server that the game configuration phase ended and the game can start.
+             *
+             * @public
+             * @memberof PG
+             */
+            exitGameLobby: function() {
+                window.parent.postMessage({
+                    type: 'exitGameLobby'
                 }, origin);
             },
 

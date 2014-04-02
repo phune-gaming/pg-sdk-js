@@ -229,7 +229,7 @@
 
             /**
              * Informs the server that the client is ready to start the match.
-             * 
+             *
              * @public
              * @memberof PG
              */
@@ -241,7 +241,7 @@
 
             /**
              * Informs the server that the game configuration phase ended and the game can start.
-             * 
+             *
              * @public
              * @memberof PG
              */
