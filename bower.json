@@ -1,0 +1,26 @@
+{
+  "name": "phune-gaming-sdk",
+  "version": "0.0.1",
+  "homepage": "https://github.com/phune-gaming/pg-sdk-js",
+  "authors": [
+    "Present Technologies <phunegaming@present-technologies.com>"
+  ],
+  "description": "Phune Gaming SDK for JavaScript",
+  "main": "dist/PG.js",
+  "keywords": [
+    "phune",
+    "gaming",
+    "sdk"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "bower_components",
+    "node_modules",
+    "src",
+    ".gitignore",
+    "bower.json",
+    "Gruntfile.js",
+    "package.json",
+    "README.md"
+  ]
+}

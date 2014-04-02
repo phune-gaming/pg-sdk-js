@@ -44,11 +44,17 @@ module.exports = function(grunt) {
         src: ['package.json']
       }
     },
+    copy: {
+      dist: {
+        src: 'src/PG.js',
+        dest: 'dist/PG.js'
+      }
+    },
     uglify: {
       dist: {
         files: {
           'dist/PG.min.js': [
-            'src/PG.js'
+            'dist/PG.js'
           ]
         }
       }
@@ -64,7 +70,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['clean', 'jshint', 'uglify']);
-  grunt.registerTask('build', ['uglify']);
+  grunt.registerTask('default', ['clean', 'jshint', 'copy', 'uglify']);
+  grunt.registerTask('build', ['copy', 'uglify']);
   grunt.registerTask('docs', ['jsdoc']);
 };
