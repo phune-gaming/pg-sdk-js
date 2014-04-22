@@ -52,8 +52,8 @@
          * @private
          * @abstract
          * @memberof PG
-         * @param {Object} player Current player details.
-         * @param {Object} opponent Opponent details.
+         * @param {Object} player The current player details.
+         * @param {Object} opponent The opponent details.
          * @param {string} deviceType Indicates the type of the device where the game is running. Possible values are 'MOBILE' and 'TV'.
          */
         var onMatchPrepare = function(player, opponent, deviceType) {
@@ -61,7 +61,7 @@
         };
 
         /**
-         * The game can now configure the match details.
+         * The game can now configure additional match details.
          *
          * @private
          * @abstract
@@ -91,39 +91,27 @@
          * @private
          * @abstract
          * @memberof PG
-         * @param {boolean} playerIdWhoSentTheMove The identifier of the player that sent the move.
-         * @param {boolean} playerIdToPlayNext The identifier of the player to whom the next move belongs.
+         * @param {number} playerIdWhoSentTheMove The identifier of the player that sent the move.
+         * @param {number} playerIdToPlayNext The identifier of the player to whom the next move belongs.
          * @param {Object} moveDetails The move details.
          * @param {Object} moveResults The results of the move validation.
-         * @param {string} [gameResult] If the move ended the game, this indicates its results. Possible values are 'won', 'lost', and 'draw'.
+         * @param {string} [gameResult] If the move ended the game, this indicates its results. Possible values are 'won', 'lost' or 'draw'.
          */
         var onMoveValid = function(playerIdWhoSentTheMove, playerIdToPlayNext, moveDetails, moveResults, gameResult) {
             throw new Error('onMoveValid is not implemented.');
         };
 
         /**
-         * Acknowledgment to an invalid move.
+         * Acknowledgment to an invalid move sent by the current player.
          *
          * @private
          * @abstract
          * @memberof PG
-         * @param {boolean} playerIdWhoSentTheMove The identifier of the player that sent the move.
-         * @param {boolean} playerIdToPlayNext The identifier of the player to whom the next move belongs.
+         * @param {number} playerIdToPlayNext The identifier of the player to whom the next move belongs.
+         * @param {Object} moveResults The results of the move validation.
          */
-        var onMoveInvalid = function(playerIdWhoSentTheMove, playerIdToPlayNext) {
+        var onMoveInvalid = function(playerIdToPlayNext, moveResults) {
             throw new Error('onMoveInvalid is not implemented.');
-        };
-
-        /**
-         * Called by the platform when a match end event is received.
-         *
-         * @private
-         * @abstract
-         * @memberof PG
-         * @param {string} gameResult The game results. Possible values are 'won', 'lost', and 'draw'.
-         */
-        var onMatchEnd = function(gameResult) {
-            throw new Error('onMatchEnd is not implemented.');
         };
 
         /**
@@ -132,7 +120,7 @@
          * @private
          * @abstract
          * @memberof PG
-         * @param {boolean} playerWhoSentTheMessage The identifier of the player that sent the message.
+         * @param {number} playerWhoSentTheMessage The identifier of the player that sent the message.
          * @param {Object} messageDetails Message specific to a game and unknown to the platform. The developer is advised to have multiple message types with different bodies in order to achieve different goals.
          * @param {Object} messageResults The result returned by the server-side rules.
          */
@@ -153,12 +141,24 @@
         };
 
         /**
+         * Called by the platform when a match end event is received.
+         *
+         * @private
+         * @abstract
+         * @memberof PG
+         * @param {string} gameResult The game results. Possible values are 'won', 'lost' or 'draw'.
+         */
+        var onMatchEnd = function(gameResult) {
+            throw new Error('onMatchEnd is not implemented.');
+        };
+
+        /**
          * A keyboard or TV remote control key was pressed.
          *
          * @private
          * @abstract
          * @memberof PG
-         * @param {string} key The key that was pressed. Possible values are 'left', 'right', 'up', 'down', and 'enter'.
+         * @param {string} key The key that was pressed. Possible values are 'left', 'right', 'up', 'down' or 'enter'.
          */
         var onKeyPress = function(key) {
             throw new Error('onKeyPress is not implemented.');
@@ -170,7 +170,7 @@
              *
              * @public
              * @memberof PG
-             * @param {Object} params Object containing all the options to configure the SDK. This includes the mandatory callback functions: onMatchPrepare, onMatchStart, onMoveValid, onMoveInvalid, onMatchEnd, and the optional callback functions: onServerMessage, onPlayerMessage, and onKeyPress.
+             * @param {Object} params Object containing all the options to configure the SDK. This includes the mandatory callback functions: onMatchPrepare, onMatchStart, onMoveValid, onMoveInvalid, onMatchEnd, as well as the optional callback functions: onServerMessage, onPlayerMessage and onKeyPress.
              */
             init: function(params) {
                 onMatchPrepare = params.onMatchPrepare || onMatchPrepare;
@@ -204,7 +204,7 @@
                         onMoveValid(msg.data.playerId, msg.data.nextPlayerId, msg.data.content, msg.data.evaluationContent, getGameResult(msg.data.winnerPlayerId));
                         break;
                     case 'matchMoveInvalid':
-                        onMoveInvalid(msg.data.playerId, msg.data.nextPlayerId);
+                        onMoveInvalid(msg.data.nextPlayerId, msg.data.evaluationContent);
                         break;
                     case 'matchEnd':
                         onMatchEnd(getGameResult(msg.data.winnerPlayerId));
