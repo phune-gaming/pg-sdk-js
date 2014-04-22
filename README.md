@@ -2,24 +2,29 @@
 
 Build HTML5 games for the Phune Gaming platform.
 
-Please read the [Phune Gaming SDK JSDocs](http://phune-gaming.github.io/pg-sdk-js/) for API documentation.
-
-To build the docs locally please read the following sections.
+Please read [Phune Gaming developer's documentation](http://developers.phune.com) for more information.
 
 ## Install
 
-Building Phune Gaming SDK requires you to have previously installed [Node.js](http://nodejs.org/).
+Building Phune Gaming SDK requires you to have previously installed [Node.js](http://nodejs.org/) and [Ruby](http://www.ruby-lang.org/).
 
 Install Grunt's command line interface globally:
 
 ```
-npm install -g grunt-cli
+$ npm install -g grunt-cli
 ```
 
 Install Node.js dependencies:
 
 ```
-npm install
+$ npm install
+```
+
+Install [Ruby Gems](https://rubygems.org/) dependencies:
+
+```
+$ gem install bundler
+$ bundle install
 ```
 
 ## Build
@@ -27,25 +32,27 @@ npm install
 Build the SDK:
 
 ```
-grunt build
+$ grunt build
 ```
 
 Clean, lint, and build the SDK:
 
 ```
-grunt
-```
-
-Generate the API documentation:
-
-```
-grunt docs
+$ grunt
 ```
 
 There are many other tasks that can be run through Grunt. For the complete list of available tasks run:
 
 ```
-grunt --help
+$ grunt --help
+```
+
+## API
+
+Generate and deploy the API documentation:
+
+```
+$ rake
 ```
 
 ## License
