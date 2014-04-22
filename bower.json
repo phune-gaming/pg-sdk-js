@@ -1,6 +1,6 @@
 {
   "name": "phune-gaming-sdk",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "homepage": "https://github.com/phune-gaming/pg-sdk-js",
   "authors": [
     "Present Technologies <phunegaming@present-technologies.com>"
@@ -19,8 +19,10 @@
     "src",
     ".gitignore",
     "bower.json",
+    "Gemfile",
     "Gruntfile.js",
     "package.json",
+    "Rakefile",
     "README.md"
   ]
 }
