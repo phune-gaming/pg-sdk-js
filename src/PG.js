@@ -52,8 +52,8 @@
          * @private
          * @abstract
          * @memberof PG
-         * @param {Object} player Current player details.
-         * @param {Object} opponent Opponent details.
+         * @param {Object} player The current player details.
+         * @param {Object} opponent The opponent details.
          * @param {string} deviceType Indicates the type of the device where the game is running. Possible values are 'MOBILE' and 'TV'.
          */
         var onMatchPrepare = function(player, opponent, deviceType) {
@@ -61,7 +61,7 @@
         };
 
         /**
-         * The game can now configure the match details.
+         * The game can now configure additional match details.
          *
          * @private
          * @abstract
@@ -102,15 +102,15 @@
         };
 
         /**
-         * Acknowledgment to an invalid move.
+         * Acknowledgment to an invalid move sent by the current player.
          *
          * @private
          * @abstract
          * @memberof PG
-         * @param {number} playerIdWhoSentTheMove The identifier of the player that sent the move.
          * @param {number} playerIdToPlayNext The identifier of the player to whom the next move belongs.
+         * @param {Object} moveResults The results of the move validation.
          */
-        var onMoveInvalid = function(playerIdWhoSentTheMove, playerIdToPlayNext) {
+        var onMoveInvalid = function(playerIdToPlayNext, moveResults) {
             throw new Error('onMoveInvalid is not implemented.');
         };
 
@@ -204,7 +204,7 @@
                         onMoveValid(msg.data.playerId, msg.data.nextPlayerId, msg.data.content, msg.data.evaluationContent, getGameResult(msg.data.winnerPlayerId));
                         break;
                     case 'matchMoveInvalid':
-                        onMoveInvalid(msg.data.playerId, msg.data.nextPlayerId);
+                        onMoveInvalid(msg.data.nextPlayerId, msg.data.evaluationContent);
                         break;
                     case 'matchEnd':
                         onMatchEnd(getGameResult(msg.data.winnerPlayerId));
