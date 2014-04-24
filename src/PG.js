@@ -14,8 +14,7 @@
      */
     var PG = function() {
 
-        var origin = (document.location.origin) ? document.location.origin : document.location.protocol + '//' + document.location.host,
-            result = {
+        var result = {
                 WON: 'won',
                 LOST: 'lost',
                 DRAW: 'draw'
@@ -184,10 +183,6 @@
                 onKeyPress = params.onKeyPress || onKeyPress;
 
                 window.addEventListener('message', function(msg) {
-                    if (msg.origin !== origin) {
-                        console.warn('Origin not recognized: ' + msg.origin);
-                        return;
-                    }
                     switch (msg.data.type) {
                     case 'matchPrepare':
                         player = msg.data.player;
@@ -224,7 +219,7 @@
                 // Inform the platform that the game loaded successfully.
                 window.parent.postMessage({
                     type: 'loaded'
-                }, origin);
+                }, '*');
             },
 
             /**
@@ -236,7 +231,7 @@
             ready: function() {
                 window.parent.postMessage({
                     type: 'ready'
-                }, origin);
+                }, '*');
             },
 
             /**
@@ -248,7 +243,7 @@
             exitGameLobby: function() {
                 window.parent.postMessage({
                     type: 'exitGameLobby'
-                }, origin);
+                }, '*');
             },
 
             /**
@@ -268,7 +263,7 @@
                 window.parent.postMessage({
                     type: 'move',
                     content: moveDetails
-                }, origin);
+                }, '*');
 
                 return true;
             },
@@ -282,7 +277,7 @@
             showMenu: function() {
                 window.parent.postMessage({
                     type: 'showMenu'
-                }, origin);
+                }, '*');
             },
 
             /**
@@ -301,7 +296,7 @@
                     publicAnswer: isAnswerPublic,
                     requiresConcurrencyControl: (serializeRequest) ? serializeRequest : true,
                     content: messageDetails
-                }, origin);
+                }, '*');
             },
 
             /**
@@ -319,14 +314,14 @@
                         type: 'playerMessage',
                         content: messageDetails
                     };
-                    window.parent.postMessage(message, origin);
+                    window.parent.postMessage(message, '*');
 
                     if (sendTimeIntervalLimit) {
                         setTimeout(function() {
                             if (lastMessage !== message) {
                                 message = lastMessage;
                                 lastMessage = null;
-                                window.parent.postMessage(message, origin);
+                                window.parent.postMessage(message, '*');
                             } else {
                                 lastMessage = null;
                             }
