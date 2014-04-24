@@ -1,5 +1,7 @@
 /**
- * @file Phune Gaming SDK providing all platform related functionality.
+ * Phune Gaming SDK for JavaScript v{{ VERSION }}
+ *
+ * @file Handles the communication between the Phune Gaming platform and the games.
  * @license MIT License <http://opensource.org/licenses/MIT>
  * @copyright Copyright (c) 2014 Present Technologies
  */
@@ -14,7 +16,7 @@
      */
     var PG = function() {
 
-        var origin = (document.location.origin) ? document.location.origin : document.location.protocol + '//' + document.location.host,
+        var origin = '*', // (document.location.origin) ? document.location.origin : document.location.protocol + '//' + document.location.host,
             result = {
                 WON: 'won',
                 LOST: 'lost',
@@ -184,10 +186,10 @@
                 onKeyPress = params.onKeyPress || onKeyPress;
 
                 window.addEventListener('message', function(msg) {
-                    if (msg.origin !== origin) {
-                        console.warn('Origin not recognized: ' + msg.origin);
-                        return;
-                    }
+                    // if (msg.origin !== origin) {
+                    //     console.warn('Origin not recognized: ' + msg.origin);
+                    //     return;
+                    // }
                     switch (msg.data.type) {
                     case 'matchPrepare':
                         player = msg.data.player;
