@@ -1,7 +1,7 @@
 {
   "name": "phune-gaming-sdk",
   "description": "Phune Gaming SDK for JavaScript",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/phune-gaming/pg-sdk-js",
   "author": {
     "name": "Present Technologies",
@@ -28,6 +28,7 @@
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-uglify": "~0.4.0",
     "grunt-jsdoc": "~0.5.0",
+    "grunt-text-replace": "~0.3.0",
     "load-grunt-tasks": "~0.4.0"
   }
 }

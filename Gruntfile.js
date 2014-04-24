@@ -4,6 +4,7 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
     clean: {
       dist: ['dist', 'docs']
     },
@@ -50,6 +51,16 @@ module.exports = function(grunt) {
         dest: 'dist/PG.js'
       }
     },
+    replace: {
+      src: {
+        src: ['dist/PG.js'],
+        overwrite: true,
+        replacements: [{
+          from: /{{ VERSION }}/g,
+          to: '<%= pkg.version %>'
+        }]
+      }
+    },
     uglify: {
       dist: {
         files: {
@@ -70,7 +81,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['clean', 'jshint', 'copy', 'uglify']);
-  grunt.registerTask('build', ['copy', 'uglify']);
+  grunt.registerTask('default', ['clean', 'jshint', 'copy', 'replace', 'uglify']);
+  grunt.registerTask('build', ['copy', 'replace', 'uglify']);
   grunt.registerTask('docs', ['jsdoc']);
 };
