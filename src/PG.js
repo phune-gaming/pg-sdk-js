@@ -254,6 +254,18 @@
             },
 
             /**
+             * Asks the platform to show the game menu.
+             *
+             * @public
+             * @memberof PG
+             */
+            showMenu: function() {
+                window.parent.postMessage({
+                    type: 'showMenu'
+                }, origin);
+            },
+
+            /**
              * Send a move to the platform server.
              *
              * @public
@@ -262,7 +274,7 @@
              * @param {function(Object): boolean} [validate] Optional function to validate the move before sending it to server.
              * @returns {boolean} True when the move is valid or when no validation function was provided.
              */
-            move: function(moveDetails, validate) {
+            sendMove: function(moveDetails, validate) {
                 if (validate && !validate(moveDetails)) {
                     return false;
                 }
@@ -276,18 +288,6 @@
             },
 
             /**
-             * Asks the platform to show the game menu.
-             *
-             * @public
-             * @memberof PG
-             */
-            showMenu: function() {
-                window.parent.postMessage({
-                    type: 'showMenu'
-                }, origin);
-            },
-
-            /**
              * Send a message to the server-side rules. This message is specific to a game and will not be processed by the platform itself.
              * The response from the server could either be sent to you only or to all players.
              *
@@ -297,7 +297,7 @@
              * @param {boolean} isAnswerPublic Whether the reply from the server's rules should be sent to all players or not.
              * @param {boolean} [serializeRequest] Whether the messages should be processed in order of arrival or can be executed in parallel.
              */
-            serverMessage: function(messageDetails, isAnswerPublic, serializeRequest) {
+            sendMessageToServer: function(messageDetails, isAnswerPublic, serializeRequest) {
                 window.parent.postMessage({
                     type: 'serverMessage',
                     publicAnswer: isAnswerPublic,
@@ -315,7 +315,7 @@
              * @param {number} [sendTimeIntervalLimit] Do not allow sending more than one message within the specified time in milliseconds.
              *                 If this is called more than once during this interval only the last message will be sent.
              */
-            playerMessage: function(messageDetails, sendTimeIntervalLimit) {
+            sendMessageToPlayer: function(messageDetails, sendTimeIntervalLimit) {
                 if (!sendTimeIntervalLimit || lastMessage === null) {
                     message = {
                         type: 'playerMessage',
