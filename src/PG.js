@@ -80,7 +80,7 @@
          * @private
          * @abstract
          * @memberof PG
-         * @param {boolean} playerIdToPlayNext The identifier of the player to whom the next move belongs.
+         * @param {number} playerIdToPlayNext The identifier of the player to whom the next move belongs.
          * @param {number} timeToPlay Time allowed for the player to make a move.
          */
         var onMatchStart = function(playerIdToPlayNext, timeToPlay) {
