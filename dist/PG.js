@@ -1,5 +1,5 @@
 /**
- * Phune Gaming SDK for JavaScript v0.1.2
+ * Phune Gaming SDK for JavaScript v0.1.4
  *
  * @file Handles the communication between the Phune Gaming platform and the games.
  * @license MIT License <http://opensource.org/licenses/MIT>
