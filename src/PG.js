@@ -26,15 +26,15 @@
             player, opponent;
 
         /**
-         * Get the game results with the correct value based on the winnerPlayerId param.
+         * Get the match result with the correct value based on the winnerPlayerId param.
          *
          * @private
          * @abstract
          * @memberof PG
          * @param {number} winnerPlayerId The id of the player that won the match.
-         * @returns {string} A game result valid value.
+         * @returns {string} A match result valid value.
          */
-        var getGameResult = function(winnerPlayerId) {
+        var getMatchResult = function(winnerPlayerId) {
             if (typeof winnerPlayerId === 'undefined') {
                 return;
             }
@@ -96,10 +96,10 @@
          * @param {number} playerIdWhoSentTheMove The identifier of the player that sent the move.
          * @param {number} playerIdToPlayNext The identifier of the player to whom the next move belongs.
          * @param {Object} moveDetails The move details.
-         * @param {Object} moveResults The results of the move validation.
-         * @param {string} [gameResult] If the move ended the game, this indicates its results. Possible values are 'won', 'lost' or 'draw'.
+         * @param {Object} moveEvaluation The result of the move validation.
+         * @param {string} [matchResult] If the move ended the match, this indicates its result. Possible values are 'won', 'lost' or 'draw'.
          */
-        var onMoveValid = function(playerIdWhoSentTheMove, playerIdToPlayNext, moveDetails, moveResults, gameResult) {
+        var onMoveValid = function(playerIdWhoSentTheMove, playerIdToPlayNext, moveDetails, moveEvaluation, matchResult) {
             throw new Error('onMoveValid is not implemented.');
         };
 
@@ -110,9 +110,9 @@
          * @abstract
          * @memberof PG
          * @param {number} playerIdToPlayNext The identifier of the player to whom the next move belongs.
-         * @param {Object} moveResults The results of the move validation.
+         * @param {Object} moveEvaluation The result of the move validation.
          */
-        var onMoveInvalid = function(playerIdToPlayNext, moveResults) {
+        var onMoveInvalid = function(playerIdToPlayNext, moveEvaluation) {
             throw new Error('onMoveInvalid is not implemented.');
         };
 
@@ -124,9 +124,9 @@
          * @memberof PG
          * @param {number} playerWhoSentTheMessage The identifier of the player that sent the message.
          * @param {Object} messageDetails Message specific to a game and unknown to the platform. The developer is advised to have multiple message types with different bodies in order to achieve different goals.
-         * @param {Object} messageResults The result returned by the server-side rules.
+         * @param {Object} messageResult The result returned by the server-side rules.
          */
-        var onServerMessage = function(playerIdWhoSentTheMessage, messageDetails, messageResults) {
+        var onServerMessage = function(playerIdWhoSentTheMessage, messageDetails, messageResult) {
             throw new Error('onServerMessage is not implemented.');
         };
 
@@ -148,9 +148,9 @@
          * @private
          * @abstract
          * @memberof PG
-         * @param {string} gameResult The game results. Possible values are 'won', 'lost' or 'draw'.
+         * @param {string} matchResult The match result. Possible values are 'won', 'lost' or 'draw'.
          */
-        var onMatchEnd = function(gameResult) {
+        var onMatchEnd = function(matchResult) {
             throw new Error('onMatchEnd is not implemented.');
         };
 
@@ -203,13 +203,13 @@
                         onMatchStart(msg.data.nextPlayerId, msg.data.timeout);
                         break;
                     case 'matchMoveValid':
-                        onMoveValid(msg.data.playerId, msg.data.nextPlayerId, msg.data.content, msg.data.evaluationContent, getGameResult(msg.data.winnerPlayerId));
+                        onMoveValid(msg.data.playerId, msg.data.nextPlayerId, msg.data.content, msg.data.evaluationContent, getMatchResult(msg.data.winnerPlayerId));
                         break;
                     case 'matchMoveInvalid':
                         onMoveInvalid(msg.data.nextPlayerId, msg.data.evaluationContent);
                         break;
                     case 'matchEnd':
-                        onMatchEnd(getGameResult(msg.data.winnerPlayerId));
+                        onMatchEnd(getMatchResult(msg.data.winnerPlayerId));
                         break;
                     case 'serverMessage':
                         onServerMessage(msg.data.playerId, msg.data.content, msg.data.result);
